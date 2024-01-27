@@ -2,16 +2,32 @@ import React from "react";
 import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import Loader from "../components/Loader";
-
+import {soundoff,soundon} from '../assets/icons'
 import Island from "../models/island";
 import Sky from "../models/Sky";
 import Bird from "../models/Bird";
-import Plane from "../models/Plane";
-import HomeInfo from "../components/HomeInfo";
+import sakura from "../assets/sakura.mp3";
+import { useRef,useEffect } from "react";
 
 const Home = () => {
+
+  const audioRef = useRef(new Audio(sakura));
+  audioRef.current.volume = 0.4;
+  audioRef.current.loop = true;
+
   const[currentStage,setCurrentStage] = useState(0)
   const [isRotating, setIsRotating] = useState(false);
+  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+  useEffect(() => {
+    if (isPlayingMusic) {
+      audioRef.current.play();
+    }
+
+    return () => {
+      audioRef.current.pause();
+    };
+  }, [isPlayingMusic]);
+
   const adjustIslandForScreenSize = () => {
     let screenPosition = [0, -6.5, -43];
     let screenScale = null;
@@ -45,7 +61,7 @@ const Home = () => {
     <section className="w-full h-screen relative">
 
       <Canvas
-        className={`w-full h-screen bg-trasparent $ {isRotating ? 'cursor-grabing' : 'cursor-grab'}`}
+        className={`w-full h-screen bg-trasparent $ ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}
         camera={{ near: 0.1, far: 1000 }}
       >
         <Suspense fallback={<Loader />}>
@@ -55,9 +71,10 @@ const Home = () => {
           <spotLight />
           <hemisphereLight
             skycolor="#b1e1ff"
-            groundColor="#000000"
+            groundColor=""
             intensity={1}
           />
+          <Bird/>
           <Bird />
           <Sky isRotating={isRotating}/>
           <Island
@@ -72,6 +89,14 @@ const Home = () => {
           
         </Suspense>
       </Canvas>
+      <div className='absolute bottom-2 left-2'>
+        <img
+          src={!isPlayingMusic ? soundoff : soundon}
+          alt='jukebox'
+          onClick={() => setIsPlayingMusic(!isPlayingMusic)}
+          className='w-10 h-10 cursor-pointer object-contain'
+        />
+      </div>
     </section>
   );
 };

@@ -25,7 +25,7 @@ const Navbar = () => {
             isActive ? `text-violet-500` : `text-black`
           }
         >
-          Project
+          Contact
         </NavLink>
       </nav>
     </header>

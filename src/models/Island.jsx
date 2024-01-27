@@ -45,7 +45,7 @@ const Island = ({ setCurrentStage, isRotating, setIsRotating, ...props }) => {
     if (e.key === "ArrowLeft") {
       if (!isRotating) setIsRotating(true);
       islandRef.current.rotation.y += 0.01 * Math.PI;
-    } else e.key === "Arrowright";
+    } else e.key === "ArrowRight";
     {
       if (!isRotating) setIsRotating(true);
       islandRef.current.rotation.y -= 0.01 * Math.PI;
@@ -57,7 +57,7 @@ const Island = ({ setCurrentStage, isRotating, setIsRotating, ...props }) => {
     }
   };
   useFrame(() => {
-    // If not rotating, apply damping to slow down the rotation (smoothly)
+    
     if (!isRotating) {
       // Apply damping factor
       rotationSpeed.current *= damingFactor;
